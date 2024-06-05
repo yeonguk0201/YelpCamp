@@ -1,11 +1,11 @@
 <% layout('layouts/boilerplate')%>
 <div id="cluster-map"></div>
 <div class="container">
-  <h1>All Campgrounds</h1>
+  <h1 style="padding: 20px 0 15px 0">All Campgrounds</h1>
 
   <% for (let campground of campgrounds){%>
   <div class="card mb-3">
-    <div class="row">
+    <div class="row" data-id="<%= campground._id %>" style="cursor: pointer">
       <div class="col-md-4">
         <%if(campground.images.length) {%>
         <img crossorigin="anonymous" class="img-fluid" alt="" src="<%=campground.images[0].url%>" />
@@ -14,7 +14,7 @@
         <% } %>
       </div>
       <div class="col-md-8">
-        <div class="card-body" onclick="window.location.href='/campgrounds/<%=campground._id%>'">
+        <div class="card-body">
           <h5 class="card-title"><%= campground.title %></h5>
 
           <p class="card-text"><%= campground.description %></p>
@@ -34,3 +34,16 @@
 </script>
 
 <script src="/javascripts/clusterMap.js"></script>
+
+<script>
+  // DOMContentLoaded를 통해 문서가 완전히 로드된 후에 스크립트를 실행시켜서 id를 읽게 했다. 그리고 row를 가진 애들 중에서도 data-id 속성을 가진 애들만 선택하게 했다. 대괄호로도 선택할 수 있다.
+  document.addEventListener('DOMContentLoaded', () => {
+    const rows = document.querySelectorAll('.row[data-id]');
+    rows.forEach((row) => {
+      row.addEventListener('click', function () {
+        const campgroundId = this.getAttribute('data-id');
+        window.location.href = '/campgrounds/' + campgroundId;
+      });
+    });
+  });
+</script>
